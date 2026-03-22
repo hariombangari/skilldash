@@ -1,35 +1,34 @@
-import { useState, useEffect } from 'react'
+import { useSkills } from './hooks/useSkills'
+import { useWebSocket } from './hooks/useWebSocket'
 
 export default function App() {
-  const [stats, setStats] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const data = useSkills()
+  const { lastEvent, connected } = useWebSocket(data.refetch)
 
-  useEffect(() => {
-    fetch('/api/stats')
-      .then(res => res.json())
-      .then(data => {
-        setStats(data)
-        setLoading(false)
-      })
-      .catch(() => setLoading(false))
-  }, [])
-
-  if (loading) {
+  if (data.loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <p className="text-zinc-400">Scanning for skills...</p>
+        <div className="text-center">
+          <div className="text-zinc-400 text-lg">Scanning for skills...</div>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen p-8">
-      <h1 className="text-2xl font-bold mb-4">skilldash</h1>
-      {stats && (
-        <p className="text-zinc-400">
-          Found {stats.totalSkills} skills across {stats.totalAgents} agents
+    <div className="min-h-screen">
+      <div className="p-8">
+        <h1 className="text-2xl font-bold mb-2">skilldash</h1>
+        {data.stats && (
+          <p className="text-zinc-400">
+            {data.stats.totalSkills} skills across {data.stats.totalAgents} agents
+            {data.stats.totalSimilarities > 0 && ` · ${data.stats.totalSimilarities} similar`}
+          </p>
+        )}
+        <p className="text-zinc-600 text-sm mt-1">
+          WebSocket: {connected ? 'connected' : 'disconnected'}
         </p>
-      )}
+      </div>
     </div>
   )
 }
