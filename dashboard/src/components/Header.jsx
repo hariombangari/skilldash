@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import ThemeToggle from './ThemeToggle'
 
 function SearchIcon() {
   return (
@@ -61,6 +62,8 @@ export default function Header({
   setAgentFilter,
   query,
   setQuery,
+  theme,
+  onToggleTheme,
 }) {
   const searchRef = useRef(null)
 
@@ -84,7 +87,10 @@ export default function Header({
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <span className="text-xl font-bold text-white">skilldash</span>
-        <span className="text-zinc-400 text-sm">{statsText}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-zinc-400 text-sm">{statsText}</span>
+          <ThemeToggle theme={theme} onToggle={onToggleTheme} />
+        </div>
       </div>
 
       {/* Agent filter chips */}

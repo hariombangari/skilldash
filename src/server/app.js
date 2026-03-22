@@ -72,6 +72,16 @@ export async function createApp() {
     return c.json(similarities)
   })
 
+  // Diff: Compare two skills side by side
+  app.get('/api/diff/:id1/:id2', (c) => {
+    const id1 = decodeURIComponent(c.req.param('id1'))
+    const id2 = decodeURIComponent(c.req.param('id2'))
+    const skill1 = data.skills.find(s => s.id === id1)
+    const skill2 = data.skills.find(s => s.id === id2)
+    if (!skill1 || !skill2) return c.json({ error: 'Skill not found' }, 404)
+    return c.json({ left: skill1, right: skill2 })
+  })
+
   app.post('/api/rescan', async (c) => {
     const stats = await rescan()
     return c.json(stats)
@@ -126,6 +136,24 @@ export async function createApp() {
     try {
       await execFileAsync(opener, [folder])
       return c.json({ ok: true })
+    } catch (err) {
+      return c.json({ error: err.message }, 500)
+    }
+  })
+
+  // Action: Delete skill
+  app.post('/api/actions/delete', async (c) => {
+    const { filePath } = await c.req.json()
+    if (!filePath) return c.json({ error: 'filePath required' }, 400)
+
+    const { rm } = await import('node:fs/promises')
+    const { dirname } = await import('node:path')
+
+    // Delete the skill directory (parent of SKILL.md)
+    const skillDir = dirname(filePath)
+    try {
+      await rm(skillDir, { recursive: true })
+      return c.json({ ok: true, deleted: skillDir })
     } catch (err) {
       return c.json({ error: err.message }, 500)
     }

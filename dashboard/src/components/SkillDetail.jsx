@@ -1,6 +1,8 @@
 import { useState, useEffect, useCallback } from 'react'
 import { fetchSkillDetail } from '../lib/api'
 import { marked } from 'marked'
+import DiffView from './DiffView'
+import ConfirmModal from './ConfirmModal'
 
 const AGENT_COLORS = {
   'claude-code': '#a78bfa',
@@ -72,6 +74,8 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
   const [detail, setDetail] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [diffTarget, setDiffTarget] = useState(null)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
 
   useEffect(() => {
     if (!skillId) {
@@ -235,6 +239,14 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
                         <span className="text-xs text-zinc-500">
                           ({sim.type === 'exact-duplicate' ? 'exact duplicate' : 'same name, different content'})
                         </span>
+                        {sim.type === 'same-name-different-content' && (
+                          <button
+                            onClick={() => setDiffTarget(sim.id)}
+                            className="text-xs text-blue-400 hover:text-blue-300 ml-2 cursor-pointer"
+                          >
+                            View diff
+                          </button>
+                        )}
                       </div>
                     ))}
                   </div>
@@ -291,6 +303,14 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
           </>
         )}
       </div>
+
+      {diffTarget && (
+        <DiffView
+          leftId={skillId}
+          rightId={diffTarget}
+          onClose={() => setDiffTarget(null)}
+        />
+      )}
 
       {/* Markdown styles for skill content */}
       <style>{`

@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import { useSkills } from './hooks/useSkills'
 import { useWebSocket } from './hooks/useWebSocket'
+import { useTheme } from './hooks/useTheme'
+import { useKeyboardNav } from './hooks/useKeyboardNav'
 import Header from './components/Header'
 import SkillsTable from './components/SkillsTable'
 import SkillCard from './components/SkillCard'
 import SkillDetail from './components/SkillDetail'
+import HelpOverlay from './components/HelpOverlay'
 import Toast from './components/Toast'
 
 export default function App() {
   const data = useSkills()
   const { lastEvent, connected } = useWebSocket(data.refetch)
+  const { theme, toggle: toggleTheme } = useTheme()
   const [selectedSkillId, setSelectedSkillId] = useState(null)
 
   // Extract highlighted skill name from WebSocket event
@@ -39,6 +43,8 @@ export default function App() {
         setAgentFilter={data.setAgentFilter}
         query={data.query}
         setQuery={data.setQuery}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       <main className="flex-1 p-6">

@@ -30,6 +30,11 @@ export async function fetchSimilarities() {
   return res.json()
 }
 
+export async function fetchDiff(id1, id2) {
+  const res = await fetch(`${BASE}/api/diff/${encodeURIComponent(id1)}/${encodeURIComponent(id2)}`)
+  return res.json()
+}
+
 export async function triggerRescan() {
   const res = await fetch(`${BASE}/api/rescan`, { method: 'POST' })
   return res.json()
