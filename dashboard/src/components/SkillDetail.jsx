@@ -122,13 +122,21 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
 
   const handleOpenEditor = useCallback(() => {
     if (detail?.filePath) {
-      console.log('POST /api/actions/open-editor', { filePath: detail.filePath })
+      fetch('/api/actions/open-editor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: detail.filePath }),
+      })
     }
   }, [detail])
 
   const handleOpenFolder = useCallback(() => {
     if (detail?.filePath) {
-      console.log('POST /api/actions/open-folder', { filePath: detail.filePath })
+      fetch('/api/actions/open-folder', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: detail.filePath }),
+      })
     }
   }, [detail])
 
