@@ -89,6 +89,7 @@ export default function SkillsTable({
   similarities,
   onSelectSkill,
   highlightedSkill,
+  selectedIndex,
 }) {
   const [sortKey, setSortKey] = useState('name')
   const [sortDir, setSortDir] = useState('asc')
@@ -157,14 +158,15 @@ export default function SkillsTable({
           </tr>
         </thead>
         <tbody>
-          {sorted.map((skill) => {
+          {sorted.map((skill, index) => {
             const isHighlighted = fadingSkill && fadingSkill === skill.name
+            const isKeyboardSelected = index === selectedIndex
             return (
               <tr
                 key={skill.id}
                 className={`border-b border-zinc-800/50 hover:bg-zinc-800/50 cursor-pointer transition-colors ${
                   isHighlighted ? 'animate-highlight-fade bg-amber-500/10' : ''
-                }`}
+                } ${isKeyboardSelected ? 'ring-1 ring-zinc-600' : ''}`}
                 onClick={() => onSelectSkill?.(skill.id)}
               >
                 <td className="px-4 py-3">

@@ -15,6 +15,16 @@ export default function App() {
   const { lastEvent, connected } = useWebSocket(data.refetch)
   const { theme, toggle: toggleTheme } = useTheme()
   const [selectedSkillId, setSelectedSkillId] = useState(null)
+  const [showHelp, setShowHelp] = useState(false)
+  const [selectedIndex, setSelectedIndex] = useState(null)
+
+  useKeyboardNav({
+    skills: data.skills ?? [],
+    selectedIndex,
+    setSelectedIndex,
+    onSelectSkill: setSelectedSkillId,
+    onToggleHelp: () => setShowHelp(h => !h),
+  })
 
   // Extract highlighted skill name from WebSocket event
   const highlightedSkill = lastEvent?.path
@@ -74,6 +84,7 @@ export default function App() {
             similarities={data.similarities}
             onSelectSkill={setSelectedSkillId}
             highlightedSkill={highlightedSkill}
+            selectedIndex={selectedIndex}
           />
         )}
 
@@ -95,6 +106,7 @@ export default function App() {
         />
       )}
 
+      <HelpOverlay isOpen={showHelp} onClose={() => setShowHelp(false)} />
       <Toast event={lastEvent} />
     </div>
   )
