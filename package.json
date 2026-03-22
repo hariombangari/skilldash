@@ -4,7 +4,7 @@
   "description": "One command. One dashboard. See and understand all your agent skills.",
   "type": "module",
   "bin": {
-    "skilldash": "./src/index.js"
+    "skilldash": "src/index.js"
   },
   "scripts": {
     "dev": "node src/index.js",
@@ -18,7 +18,14 @@
     "src/",
     "dashboard/dist/"
   ],
-  "keywords": ["agent", "skills", "dashboard", "claude", "codex", "cursor"],
+  "keywords": [
+    "agent",
+    "skills",
+    "dashboard",
+    "claude",
+    "codex",
+    "cursor"
+  ],
   "author": "hariombangari",
   "license": "MIT",
   "dependencies": {
