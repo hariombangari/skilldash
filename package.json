@@ -1,0 +1,26 @@
+{
+  "name": "skilldash",
+  "version": "0.0.1",
+  "description": "One command. One dashboard. See and understand all your agent skills.",
+  "type": "module",
+  "bin": {
+    "skilldash": "./src/index.js"
+  },
+  "scripts": {
+    "dev": "node src/index.js",
+    "test": "node --test"
+  },
+  "keywords": ["agent", "skills", "dashboard", "claude", "codex", "cursor"],
+  "author": "hariombangari",
+  "license": "MIT",
+  "dependencies": {
+    "hono": "^4",
+    "@hono/node-server": "^1",
+    "@hono/node-ws": "^1",
+    "ws": "^8",
+    "chokidar": "^4",
+    "gray-matter": "^4",
+    "fast-glob": "^3",
+    "open": "^10"
+  }
+}
