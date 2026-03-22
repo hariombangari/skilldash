@@ -86,16 +86,29 @@ export async function createApp() {
     const { promisify } = await import('node:util')
     const execFileAsync = promisify(execFile)
 
-    // Try cursor first, then code (VS Code)
-    for (const editor of ['cursor', 'code']) {
+    if (process.platform === 'darwin') {
+      // On macOS, use 'open -a' which finds apps properly
+      const editors = ['Cursor', 'Visual Studio Code', 'Zed']
+      for (const app of editors) {
+        try {
+          await execFileAsync('open', ['-a', app, filePath])
+          return c.json({ ok: true, editor: app })
+        } catch {
+          continue
+        }
+      }
+    }
+
+    // On Linux (or macOS fallback), try CLI commands via /usr/bin/env for PATH resolution
+    for (const editor of ['cursor', 'code', 'zed']) {
       try {
-        await execFileAsync(editor, [filePath])
+        await execFileAsync('/usr/bin/env', [editor, filePath])
         return c.json({ ok: true, editor })
       } catch {
         continue
       }
     }
-    return c.json({ error: 'No editor found (tried cursor, code)' }, 404)
+    return c.json({ error: 'No editor found (tried Cursor, VS Code, Zed)' }, 404)
   })
 
   // Action: Open Folder
