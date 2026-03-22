@@ -1,6 +1,6 @@
 {
   "name": "skilldash",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "One command. One dashboard. See and understand all your agent skills.",
   "type": "module",
   "bin": {
