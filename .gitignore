@@ -3,3 +3,5 @@ dist/
 .env*.local
 _bmad*
 .DS_Store
+dashboard/dist/
+dashboard/node_modules/

@@ -8,6 +8,8 @@
   },
   "scripts": {
     "dev": "node src/index.js",
+    "dev:dashboard": "cd dashboard && npm run dev",
+    "build:dashboard": "cd dashboard && npm run build",
     "test": "node --test"
   },
   "keywords": ["agent", "skills", "dashboard", "claude", "codex", "cursor"],
