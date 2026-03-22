@@ -134,6 +134,24 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
     }
   }, [detail])
 
+  const handleDelete = useCallback(async () => {
+    if (!detail?.filePath) return
+    try {
+      const res = await fetch('/api/actions/delete', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ filePath: detail.filePath }),
+      })
+      const data = await res.json()
+      if (data.ok) {
+        setShowDeleteConfirm(false)
+        onClose()
+      }
+    } catch (err) {
+      console.error('Delete failed:', err)
+    }
+  }, [detail, onClose])
+
   const handleOpenFolder = useCallback(() => {
     if (detail?.filePath) {
       fetch('/api/actions/open-folder', {
@@ -299,6 +317,12 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
               >
                 Open Folder
               </button>
+              <button
+                onClick={() => setShowDeleteConfirm(true)}
+                className="ml-auto text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg px-4 py-2 text-sm cursor-pointer transition-colors"
+              >
+                Delete
+              </button>
             </div>
           </>
         )}
@@ -311,6 +335,17 @@ export default function SkillDetail({ skillId, similarities, onClose }) {
           onClose={() => setDiffTarget(null)}
         />
       )}
+
+      <ConfirmModal
+        isOpen={showDeleteConfirm}
+        title="Delete skill?"
+        message="This will permanently delete this skill directory from disk. This action cannot be undone."
+        detail={detail?.filePath ? detail.filePath.split('/').slice(0, -1).join('/') : ''}
+        confirmLabel="Delete"
+        confirmVariant="danger"
+        onConfirm={handleDelete}
+        onCancel={() => setShowDeleteConfirm(false)}
+      />
 
       {/* Markdown styles for skill content */}
       <style>{`
